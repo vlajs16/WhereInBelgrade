@@ -30,7 +30,7 @@ namespace API.Controllers
         }
 
         // GET: api/Mesto/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}", Name = "GetMesta")]
         public ActionResult<Mesto> Get(int id)
         {
             Mesto m = _mestoLogic.Find(id);

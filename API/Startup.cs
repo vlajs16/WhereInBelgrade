@@ -32,6 +32,7 @@ namespace API
             services.AddDbContext<BeogradContext>(options => options.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=WhereInBelgradeDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
             services.AddTransient<IMestoLogic, MestoLogic>();
             services.AddTransient<IKorisnikLogic, KorisnikLogic>();
+            services.AddTransient<IKategorijaLogic, KategorijaLogic>(); ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

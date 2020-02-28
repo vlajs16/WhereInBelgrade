@@ -9,6 +9,7 @@ namespace DataAccessLayer
     {
         public DbSet<Mesto> Mesta { get; set; }
         public DbSet<Korisnik> Korisnici { get; set; }
+        public DbSet<Kategorija> Kategorije { get; set; }
         public BeogradContext( DbContextOptions<BeogradContext> options) : base(options)
         {
         }
