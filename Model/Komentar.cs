@@ -8,8 +8,8 @@ namespace Model
     {
         public DateTime DatumVreme { get; set; }
         public string Tekst { get; set; }
-        public Dogadjaj Dogadjaj { get; set; }
-        public Korisnik Korisnik { get; set; }
+        public virtual Dogadjaj Dogadjaj { get; set; }
+        public virtual Korisnik Korisnik { get; set; }
         public int DogadjajID { get; set; }
         public int KorisnikID { get; set; }
     }

@@ -1,10 +1,12 @@
 ﻿using DataAccessLayer;
+using Microsoft.EntityFrameworkCore;
 using Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BelgradeLogic
 {
@@ -16,32 +18,32 @@ namespace BelgradeLogic
         {
             _beogradContext = beogradContext;
         }
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            Kategorija k = _beogradContext.Kategorije.FirstOrDefault(x => x.KategorijaID == id);
+            Kategorija k = await _beogradContext.Kategorije.FirstOrDefaultAsync(x => x.KategorijaID == id);
             if (k == null)
                 return false;
             _beogradContext.Remove(k);
-            _beogradContext.SaveChanges();
+            await _beogradContext.SaveChangesAsync();
             return true;
         }
 
-        public Kategorija Find(int id)
+        public async Task<Kategorija> Find(int id)
         {
-            return _beogradContext.Kategorije.FirstOrDefault(x => x.KategorijaID == id);
+            return await _beogradContext.Kategorije.FirstOrDefaultAsync(x => x.KategorijaID == id);
         }
 
-        public List<Kategorija> GetObjects()
+        public async Task<List<Kategorija>> GetObjects()
         {
-            return _beogradContext.Kategorije.ToList();
+            return await _beogradContext.Kategorije.ToListAsync();
         }
 
-        public bool Insert(Kategorija kategorija)
+        public async Task<bool> Insert(Kategorija kategorija)
         {
             try
             {
                 _beogradContext.Kategorije.Add(kategorija);
-                _beogradContext.SaveChanges();
+                await _beogradContext.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
@@ -51,14 +53,15 @@ namespace BelgradeLogic
             }
         }
 
-        public bool Update(Kategorija kategorija)
+
+        public async Task<bool> Update(Kategorija kategorija)
         {
-            Kategorija k = _beogradContext.Kategorije.FirstOrDefault(x => x.KategorijaID == kategorija.KategorijaID);
+            Kategorija k = await _beogradContext.Kategorije.FirstOrDefaultAsync(x => x.KategorijaID == kategorija.KategorijaID);
             if (k == null)
                 return false;
             k.Naziv = kategorija.Naziv;
             _beogradContext.Kategorije.Update(k);
-            _beogradContext.SaveChanges();
+            await _beogradContext.SaveChangesAsync();
             return true;
         }
     }

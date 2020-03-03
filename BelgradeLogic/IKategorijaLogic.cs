@@ -2,15 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BelgradeLogic
 {
     public interface IKategorijaLogic
     {
-        List<Kategorija> GetObjects();
-        bool Insert(Kategorija kategorija);
-        bool Update(Kategorija kategorija);
-        bool Delete(int id);
-        Kategorija Find(int id);
+        Task<List<Kategorija>> GetObjects();
+        Task<bool> Insert(Kategorija kategorija);
+        Task<bool> Update(Kategorija kategorija);
+        Task<bool> Delete(int id);
+        Task<Kategorija> Find(int id);
     }
 }

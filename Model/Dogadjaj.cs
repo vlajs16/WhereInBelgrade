@@ -11,9 +11,9 @@ namespace Model
         public string Opis { get; set; }
         public DateTime DatumPocetka { get; set; }
         public DateTime DatumZavrsetka { get; set; }
-        public Mesto Lokacija { get; set; }
-        public List<Komentar> Komentari { get; set; }
-        public List<KategorijaDogadjaj> kategorijeDogadjaji { get; set; }
+        public virtual Mesto Lokacija { get; set; }
+        public virtual List<Komentar> Komentari { get; set; }
+        public virtual List<KategorijaDogadjaj> KategorijeDogadjaji { get; set; }
 
     }
 }

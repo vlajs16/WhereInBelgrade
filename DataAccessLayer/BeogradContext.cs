@@ -27,5 +27,11 @@ namespace DataAccessLayer
             modelBuilder.Entity<KategorijaDogadjaj>().HasKey(kd => new { kd.KategorijaID, kd.DogadjajID });
 
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+
+            optionsBuilder.UseLazyLoadingProxies();
+        }
     }
 }

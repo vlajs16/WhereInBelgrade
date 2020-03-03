@@ -12,6 +12,6 @@ namespace Model
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public bool Admin { get; set; }
-        public List<Svidjanje> Svidjanja { get; set; }
+        public virtual List<Svidjanje> Svidjanja { get; set; }
     }
 }

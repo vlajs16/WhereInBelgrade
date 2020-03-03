@@ -17,12 +17,10 @@ namespace API.Controllers
     public class MestoController : ControllerBase
     {
         private IMestoLogic _mestoLogic;
-        private BeogradContext _beogradContext;
 
-        public MestoController(IMestoLogic mestoLogic, BeogradContext beogradContext)
+        public MestoController(IMestoLogic mestoLogic)
         {
             _mestoLogic = mestoLogic;
-            _beogradContext = beogradContext;
         }
         // GET: api/Mesto
         [HttpGet]
