@@ -8,7 +8,7 @@ namespace Model
     {
         public int KategorijaID { get; set; }
         public int DogadjajID { get; set; }
-        public Kategorija Kategorija { get; set; }
-        public Dogadjaj Dogadjaj { get; set; }
+        public virtual Kategorija Kategorija { get; set; }
+        public virtual Dogadjaj Dogadjaj { get; set; }
     }
 }
