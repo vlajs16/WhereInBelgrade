@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using DataAccessLayer;
+using Microsoft.EntityFrameworkCore;
 using Model;
 
 namespace BelgradeLogic
@@ -17,32 +19,32 @@ namespace BelgradeLogic
             _beogradContext = beogradContext;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            Mesto m = _beogradContext.Mesta.FirstOrDefault(p=> p.MestoID == id);
+            Mesto m = await _beogradContext.Mesta.FirstOrDefaultAsync(p=> p.MestoID == id);
             if (m == null)
                 return false;
             _beogradContext.Remove(m);
-            _beogradContext.SaveChanges();
+            await _beogradContext.SaveChangesAsync();
             return true;
         }
 
-        public Mesto Find(int id)
+        public async Task<Mesto> Find(int id)
         {
-            return _beogradContext.Mesta.FirstOrDefault(p => p.MestoID == id);
+            return await _beogradContext.Mesta.FirstOrDefaultAsync(p => p.MestoID == id);
         }
 
-        public List<Mesto> GetObjects()
+        public async Task<List<Mesto>> GetObjects()
         {
-            return _beogradContext.Mesta.ToList();
+            return await _beogradContext.Mesta.ToListAsync();
         }
 
-        public bool Insert(Mesto mesto)
+        public async Task<bool> Insert(Mesto mesto)
         {
             try
             {
                 _beogradContext.Mesta.Add(mesto);
-                _beogradContext.SaveChanges();
+                await _beogradContext.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
@@ -52,9 +54,9 @@ namespace BelgradeLogic
             }
         }
 
-        public bool Update(Mesto mesto)
+        public async Task<bool> Update(Mesto mesto)
         {
-            Mesto m = _beogradContext.Mesta.FirstOrDefault(p => p == mesto);
+            Mesto m = await _beogradContext.Mesta.FirstOrDefaultAsync(p => p == mesto);
             if (m == null)
                 return false;
             m.Naziv = mesto.Naziv;
@@ -63,7 +65,7 @@ namespace BelgradeLogic
             m.BrojStana = mesto.BrojStana;
             m.BrojUlice = mesto.BrojUlice;
             _beogradContext.Mesta.Update(m);
-            _beogradContext.SaveChanges();
+            await _beogradContext.SaveChangesAsync();
             return true;
         }
     }

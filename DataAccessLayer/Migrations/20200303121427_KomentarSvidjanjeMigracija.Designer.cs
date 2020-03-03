@@ -4,14 +4,16 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(BeogradContext))]
-    partial class BeogradContextModelSnapshot : ModelSnapshot
+    [Migration("20200303121427_KomentarSvidjanjeMigracija")]
+    partial class KomentarSvidjanjeMigracija
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,27 +57,17 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("DogadjajID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Naziv")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("KategorijaID");
 
-                    b.ToTable("Kategorije");
-                });
-
-            modelBuilder.Entity("Model.KategorijaDogadjaj", b =>
-                {
-                    b.Property<int>("KategorijaID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DogadjajID")
-                        .HasColumnType("int");
-
-                    b.HasKey("KategorijaID", "DogadjajID");
-
                     b.HasIndex("DogadjajID");
 
-                    b.ToTable("KategorijeDogadjaji");
+                    b.ToTable("Kategorije");
                 });
 
             modelBuilder.Entity("Model.Komentar", b =>
@@ -169,19 +161,11 @@ namespace DataAccessLayer.Migrations
                         .HasForeignKey("LokacijaMestoID");
                 });
 
-            modelBuilder.Entity("Model.KategorijaDogadjaj", b =>
+            modelBuilder.Entity("Model.Kategorija", b =>
                 {
-                    b.HasOne("Model.Dogadjaj", "Dogadjaj")
-                        .WithMany("kategorijeDogadjaji")
-                        .HasForeignKey("DogadjajID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Model.Kategorija", "Kategorija")
-                        .WithMany("KategorijeDogadjaji")
-                        .HasForeignKey("KategorijaID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Model.Dogadjaj", null)
+                        .WithMany("Kategorije")
+                        .HasForeignKey("DogadjajID");
                 });
 
             modelBuilder.Entity("Model.Komentar", b =>

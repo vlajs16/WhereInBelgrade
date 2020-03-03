@@ -1,16 +1,17 @@
 ﻿using Model;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BelgradeLogic
 {
     public interface IMestoLogic
     {
-        List<Mesto> GetObjects();
-        bool Insert(Mesto mesto);
-        bool Update(Mesto mesto);
-        bool Delete(int id);
-        Mesto Find(int id);
+        Task<List<Mesto>> GetObjects();
+        Task<bool> Insert(Mesto mesto);
+        Task<bool> Update(Mesto mesto);
+        Task<bool> Delete(int id);
+        Task<Mesto> Find(int id);
 
     }
 }

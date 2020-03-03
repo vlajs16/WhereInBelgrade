@@ -4,14 +4,16 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(BeogradContext))]
-    partial class BeogradContextModelSnapshot : ModelSnapshot
+    [Migration("20200303120644_DogadjajMigracija")]
+    partial class DogadjajMigracija
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,48 +57,17 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("DogadjajID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Naziv")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("KategorijaID");
 
+                    b.HasIndex("DogadjajID");
+
                     b.ToTable("Kategorije");
-                });
-
-            modelBuilder.Entity("Model.KategorijaDogadjaj", b =>
-                {
-                    b.Property<int>("KategorijaID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DogadjajID")
-                        .HasColumnType("int");
-
-                    b.HasKey("KategorijaID", "DogadjajID");
-
-                    b.HasIndex("DogadjajID");
-
-                    b.ToTable("KategorijeDogadjaji");
-                });
-
-            modelBuilder.Entity("Model.Komentar", b =>
-                {
-                    b.Property<int>("KorisnikID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DogadjajID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DatumVreme")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Tekst")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("KorisnikID", "DogadjajID");
-
-                    b.HasIndex("DogadjajID");
-
-                    b.ToTable("Komentari");
                 });
 
             modelBuilder.Entity("Model.Korisnik", b =>
@@ -147,21 +118,6 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Mesta");
                 });
 
-            modelBuilder.Entity("Model.Svidjanje", b =>
-                {
-                    b.Property<int>("KorisnikID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DogadjajID")
-                        .HasColumnType("int");
-
-                    b.HasKey("KorisnikID", "DogadjajID");
-
-                    b.HasIndex("DogadjajID");
-
-                    b.ToTable("Svidjanja");
-                });
-
             modelBuilder.Entity("Model.Dogadjaj", b =>
                 {
                     b.HasOne("Model.Mesto", "Lokacija")
@@ -169,49 +125,11 @@ namespace DataAccessLayer.Migrations
                         .HasForeignKey("LokacijaMestoID");
                 });
 
-            modelBuilder.Entity("Model.KategorijaDogadjaj", b =>
+            modelBuilder.Entity("Model.Kategorija", b =>
                 {
-                    b.HasOne("Model.Dogadjaj", "Dogadjaj")
-                        .WithMany("kategorijeDogadjaji")
-                        .HasForeignKey("DogadjajID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Model.Kategorija", "Kategorija")
-                        .WithMany("KategorijeDogadjaji")
-                        .HasForeignKey("KategorijaID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Model.Komentar", b =>
-                {
-                    b.HasOne("Model.Dogadjaj", "Dogadjaj")
-                        .WithMany("Komentari")
-                        .HasForeignKey("DogadjajID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Model.Korisnik", "Korisnik")
-                        .WithMany()
-                        .HasForeignKey("KorisnikID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Model.Svidjanje", b =>
-                {
-                    b.HasOne("Model.Dogadjaj", "Dogadjaj")
-                        .WithMany()
-                        .HasForeignKey("DogadjajID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Model.Korisnik", "Korisnik")
-                        .WithMany("Svidjanja")
-                        .HasForeignKey("KorisnikID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Model.Dogadjaj", null)
+                        .WithMany("Kategorije")
+                        .HasForeignKey("DogadjajID");
                 });
 #pragma warning restore 612, 618
         }

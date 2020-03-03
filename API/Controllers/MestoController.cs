@@ -24,45 +24,45 @@ namespace API.Controllers
         }
         // GET: api/Mesto
         [HttpGet]
-        public ActionResult<IEnumerable<Mesto>> Get()
+        public async Task<IActionResult> Get()
         {
-            return _mestoLogic.GetObjects();
+            return  Ok(await _mestoLogic.GetObjects());
         }
 
         // GET: api/Mesto/5
         [HttpGet("{id}", Name = "GetMesta")]
-        public ActionResult<Mesto> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            Mesto m = _mestoLogic.Find(id);
+            Mesto m = await  _mestoLogic.Find(id);
             if (m == null)
                 return NotFound($"Vrednost sa id-em: {id} ne postoji!");
-            return m;
+            return Ok(m);
         }
 
         // POST: api/Mesto
         [HttpPost]
-        public IActionResult Post([FromBody] Mesto mesto)
+        public async Task<IActionResult> Post([FromBody] Mesto mesto)
         {
-            if (!_mestoLogic.Insert(mesto))
+            if (!await _mestoLogic.Insert(mesto))
                 return BadRequest();
             return Ok();
         }
 
         // PUT: api/Mesto/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Mesto mesto)
+        public async Task<IActionResult> Put(int id, [FromBody] Mesto mesto)
         {
             mesto.MestoID = id;
-            if (!_mestoLogic.Update(mesto))
+            if (!await _mestoLogic.Update(mesto))
                 return BadRequest();
             return Ok();
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (!_mestoLogic.Delete(id))
+            if (!await _mestoLogic.Delete(id))
                 return BadRequest();
             return Ok();
         }
