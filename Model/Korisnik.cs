@@ -9,7 +9,8 @@ namespace Model
 
         public int KorisnikID { get; set; }
         public string Username { get; set; }
-        public string Password { get; set; }
+        public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
         public bool Admin { get; set; }
         public List<Svidjanje> Svidjanja { get; set; }
     }

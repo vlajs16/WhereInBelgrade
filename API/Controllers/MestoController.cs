@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using BelgradeLogic;
 using DataAccessLayer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
 
 namespace API.Controllers
 {
+    //[Authorize]
     [Route("api/mesto")]
     [ApiController]
     public class MestoController : ControllerBase
@@ -30,6 +32,7 @@ namespace API.Controllers
         }
 
         // GET: api/Mesto/5
+        //[AllowAnonymous]
         [HttpGet("{id}", Name = "GetMesta")]
         public async Task<IActionResult> Get(int id)
         {
