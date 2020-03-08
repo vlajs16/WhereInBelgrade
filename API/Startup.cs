@@ -57,6 +57,7 @@ namespace API
             services.AddTransient<ISvidjanjeLogic, SvidjanjeLogic>();
             services.AddTransient<IDogadjajLogic, DogadjajLogic>();
             services.AddCors();
+            services.AddTransient<IKomentarLogic, KomentarLogic>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
