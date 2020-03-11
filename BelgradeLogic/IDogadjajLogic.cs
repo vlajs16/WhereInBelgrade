@@ -9,6 +9,7 @@ namespace BelgradeLogic
     public interface IDogadjajLogic
     {
         Task<List<Dogadjaj>> GetObjects();
+        Task<List<Dogadjaj>> GetObjectsByKategorija(string kategorija);
         Task<bool> Insert(Dogadjaj dogadjaj);
         Task<bool> Update(Dogadjaj dogadjaj);
         Task<bool> Delete(int id);

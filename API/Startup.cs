@@ -20,6 +20,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using AutoMapper;
 
 namespace API
 {
@@ -58,6 +59,7 @@ namespace API
             services.AddTransient<IDogadjajLogic, DogadjajLogic>();
             services.AddCors();
             services.AddTransient<IKomentarLogic, KomentarLogic>();
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

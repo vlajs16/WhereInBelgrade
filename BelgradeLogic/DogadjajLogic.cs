@@ -37,6 +37,13 @@ namespace BelgradeLogic
             return await _beogradContext.Dogadjaji.ToListAsync();
         }
 
+        public async Task<List<Dogadjaj>> GetObjectsByKategorija(string kategorija)
+        {
+            List<Dogadjaj> dogadjaji =  _beogradContext.Dogadjaji.
+                Where(p => p.KategorijeDogadjaji.Any(k => k.Kategorija.Naziv == kategorija)).ToList();
+            return dogadjaji;
+        }
+
         public async Task<bool> Insert(Dogadjaj dogadjaj)
         {
             try
