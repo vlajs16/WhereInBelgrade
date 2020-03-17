@@ -20,6 +20,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using AutoMapper;
 
 namespace API
 {
@@ -37,6 +38,7 @@ namespace API
         {
             services.AddControllers().AddNewtonsoftJson(options =>
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddCors();
             services.AddDbContext<BeogradContext>(options => options.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=WhereInBelgradeDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
             services.AddTransient<IMestoLogic, MestoLogic>();
             services.AddTransient<IAuthLogic, AuthLogic>();
@@ -56,8 +58,8 @@ namespace API
             services.AddTransient<IKategorijaLogic, KategorijaLogic>();
             services.AddTransient<ISvidjanjeLogic, SvidjanjeLogic>();
             services.AddTransient<IDogadjajLogic, DogadjajLogic>();
-            services.AddCors();
             services.AddTransient<IKomentarLogic, KomentarLogic>();
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

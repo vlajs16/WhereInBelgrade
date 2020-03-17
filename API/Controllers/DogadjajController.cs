@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using BelgradeLogic;
+using DataTransferObjects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
@@ -14,25 +16,41 @@ namespace API.Controllers
     public class DogadjajController : ControllerBase
     {
         private IDogadjajLogic _dogadjajLogic;
-        public DogadjajController(IDogadjajLogic dogadjajLogic)
+        private readonly IMapper _mapper;
+
+        public DogadjajController(IDogadjajLogic dogadjajLogic, IMapper mapper)
         {
             _dogadjajLogic = dogadjajLogic;
+            _mapper = mapper;
         }
         // GET: api/Dogadjaj
         [HttpGet]
         public async Task<IActionResult> Get()
         {
+            List<Dogadjaj> dogadjajiIzBaze = await _dogadjajLogic.GetObjects();
+            List<DogadjajZaListuDTO> dogadjajiZaVracanje =
+                _mapper.Map<List<DogadjajZaListuDTO>>(dogadjajiIzBaze);
             return Ok(await _dogadjajLogic.GetObjects());
         }
 
+        [HttpGet("kategorija/{kategorija}")]
+        public async Task<IActionResult> Get(string kategorija)
+        {
+            List<Dogadjaj> dogadjajiIzBaze = await _dogadjajLogic.GetObjectsByKategorija(kategorija);
+            List<DogadjajZaListuDTO> dogadjajiZaVracanje =
+                _mapper.Map<List<DogadjajZaListuDTO>>(dogadjajiIzBaze);
+            return Ok(dogadjajiZaVracanje);
+        }
+
         // GET: api/Dogadjaj/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            Dogadjaj d = await _dogadjajLogic.Find(id);
+            Dogadjaj d = await _dogadjajLogic.Find(id); 
             if (d == null)
                 return BadRequest();
-            return Ok(d);
+            DetaljniDogadjajDTO dogadjajZaSlanje = _mapper.Map<DetaljniDogadjajDTO>(d);
+            return Ok(dogadjajZaSlanje);
         }
 
         // POST: api/Dogadjaj
