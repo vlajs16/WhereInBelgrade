@@ -9,6 +9,7 @@ namespace BelgradeLogic
     public interface IKategorijaLogic
     {
         Task<List<Kategorija>> GetObjects();
+        Task<List<Dogadjaj>> GetObjectsByKategorija(string kategorija);
         Task<bool> Insert(Kategorija kategorija);
         Task<bool> Update(Kategorija kategorija);
         Task<bool> Delete(int id);

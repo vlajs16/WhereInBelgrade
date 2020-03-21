@@ -24,6 +24,7 @@ namespace Helpers
                 .ForMember(dest => dest.MainKategorija,
                 opt => opt.MapFrom(p => p.KategorijeDogadjaji.FirstOrDefault().Kategorija));
             CreateMap<Kategorija, KategorijaZaDogadjajDTO>();
+            CreateMap<Dogadjaj, DogadjajiZaKategorijuDTO>();
         }
     }
 }

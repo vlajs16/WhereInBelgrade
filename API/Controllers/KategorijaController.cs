@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using BelgradeLogic;
 using DataAccessLayer;
+using DataTransferObjects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
@@ -15,10 +17,12 @@ namespace API.Controllers
     public class KategorijaController : ControllerBase
     {
         private IKategorijaLogic _kategorijaLogic;
+        private IMapper _mapper;
 
-        public KategorijaController(IKategorijaLogic kategorijaLogic)
+        public KategorijaController(IKategorijaLogic kategorijaLogic, IMapper mapper)
         {
             _kategorijaLogic = kategorijaLogic;
+            _mapper = mapper;
         }
         // GET: api/Kategorija
         [HttpGet]
@@ -35,6 +39,15 @@ namespace API.Controllers
             if(k==null)
                 return NotFound($"Kategorija sa id-em: {id} ne postoji!");
             return Ok(k);
+        }
+
+        [HttpGet("{kategorija}/dogadjaji")]
+        public async Task<IActionResult> Get(string kategorija)
+        {
+            List<Dogadjaj> dogadjajiIzBaze = await _kategorijaLogic.GetObjectsByKategorija(kategorija);
+            List<DogadjajiZaKategorijuDTO> dogadjajiZaVracanje =
+                _mapper.Map<List<DogadjajiZaKategorijuDTO>>(dogadjajiIzBaze);
+            return Ok(dogadjajiZaVracanje);
         }
 
         // POST: api/Kategorija
