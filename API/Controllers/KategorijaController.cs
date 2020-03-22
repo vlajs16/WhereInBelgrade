@@ -50,6 +50,15 @@ namespace API.Controllers
             return Ok(dogadjajiZaVracanje);
         }
 
+        [HttpGet("dogadjaji")]
+        public async Task<IActionResult> Get(bool provera)
+        {
+            List<Dogadjaj> dogadjajiIzBaze = await _kategorijaLogic.GetObjectsByKategorija("");
+            List<DogadjajiZaKategorijuDTO> dogadjajiZaVracanje =
+                _mapper.Map<List<DogadjajiZaKategorijuDTO>>(dogadjajiIzBaze);
+            return Ok(dogadjajiZaVracanje);
+        }
+
         // POST: api/Kategorija
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Kategorija kategorija)

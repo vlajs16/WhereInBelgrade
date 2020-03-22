@@ -40,8 +40,15 @@ namespace BelgradeLogic
 
         public async Task<List<Dogadjaj>> GetObjectsByKategorija(string kategorija)
         {
-            List<Dogadjaj> dogadjaji = _beogradContext.Dogadjaji.
+            List<Dogadjaj> dogadjaji;
+            if (string.IsNullOrEmpty(kategorija))
+            {
+                dogadjaji = _beogradContext.Dogadjaji.ToList();
+            }
+            else {
+                dogadjaji = _beogradContext.Dogadjaji.
                 Where(p => p.KategorijeDogadjaji.Any(k => k.Kategorija.Naziv == kategorija)).ToList();
+            }
             return dogadjaji;
         }
 
