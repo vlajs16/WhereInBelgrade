@@ -15,5 +15,6 @@ namespace DataTransferObjects
         public virtual Mesto Lokacija { get; set; }
         public KategorijaZaDogadjajDTO MainKategorija { get; set; }
         public virtual List<KategorijaZaDogadjajDTO> Kategorije { get; set; }
+        public bool Lajkovan { get; set; } = false;
     }
 }

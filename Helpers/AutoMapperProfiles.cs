@@ -25,6 +25,13 @@ namespace Helpers
                 opt => opt.MapFrom(p => p.KategorijeDogadjaji.FirstOrDefault().Kategorija));
             CreateMap<Kategorija, KategorijaZaDogadjajDTO>();
             CreateMap<Dogadjaj, DogadjajiZaKategorijuDTO>();
+            CreateMap<Svidjanje, DogadjajSvidjanjeDTO>()
+                .ForMember(dest => dest.Naziv,
+                opt => opt.MapFrom(p => p.Dogadjaj.Naziv))
+                .ForMember(dest => dest.ZaKolikoDana, 
+                opt => opt.MapFrom(p => p.Dogadjaj.DatumPocetka.CalculateDays()))
+                .ForMember(dest => dest.MainKategorija,
+                opt => opt.MapFrom(p => p.Dogadjaj.KategorijeDogadjaji.FirstOrDefault().Kategorija));
         }
     }
 }

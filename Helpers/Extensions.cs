@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DataAccessLayer;
+using Microsoft.AspNetCore.Http;
 using Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Helpers
 {

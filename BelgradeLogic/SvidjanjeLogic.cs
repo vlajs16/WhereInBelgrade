@@ -4,6 +4,7 @@ using Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,9 +17,9 @@ namespace BelgradeLogic
         {
             _beogradContext = beogradContext;
         }
-        public async Task<List<Svidjanje>> GetObjects()
+        public async Task<List<Svidjanje>> GetObjects(int korisnikId)
         {
-            return await _beogradContext.Svidjanja.ToListAsync();
+            return await _beogradContext.Svidjanja.Where(s => s.KorisnikID == korisnikId).ToListAsync();
         }
 
         public async Task<bool> Insert(Svidjanje svidjanje)
@@ -44,6 +45,12 @@ namespace BelgradeLogic
             _beogradContext.Remove(s);
             await _beogradContext.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<Korisnik> GetUser(int userId)
+        {
+            Korisnik k = await _beogradContext.Korisnici.FirstOrDefaultAsync(p => p.KorisnikID == userId);
+            return k;
         }
     }
 }

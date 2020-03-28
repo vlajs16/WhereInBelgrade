@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using BelgradeLogic;
 using DataAccessLayer;
+using DataTransferObjects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,37 +15,64 @@ using Model;
 
 namespace API.Controllers
 {
-    [Route("api/svidjanje")]
+    [Authorize]
+    [Route("api/users/{userId}/likes")]
     [ApiController]
     public class SvidjanjeController : ControllerBase
     {
         private ISvidjanjeLogic _svidjanjeLogic;
-        public SvidjanjeController(ISvidjanjeLogic svidjanjeLogic)
+        private readonly IMapper _mapper;
+
+        public SvidjanjeController(ISvidjanjeLogic svidjanjeLogic, IMapper mapper)
         {
             _svidjanjeLogic = svidjanjeLogic;
+            _mapper = mapper;
         }
         // GET: api/Svidjanje
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(int userId)
         {
-            return Ok(await _svidjanjeLogic.GetObjects());
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+            var userFromRepo = await _svidjanjeLogic.GetUser(userId);
+            var likes = await _svidjanjeLogic.GetObjects(userId);
+            var likedEvents = _mapper.Map<List<DogadjajSvidjanjeDTO>>(likes);
+
+            return Ok(likedEvents);
         }
 
         // POST: api/Svidjanje
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Svidjanje value)
+        [HttpPost("{id:int}")]
+        public async Task<IActionResult> Post(int userId, int id)
         {
-            if (!await _svidjanjeLogic.Insert(value))
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+            var userFromRepo = await _svidjanjeLogic.GetUser(userId);
+
+            if (userFromRepo.Svidjanja.Any(p => p.DogadjajID == id))
+                return BadRequest("You have already liked this event");
+
+            if (!await _svidjanjeLogic.Insert(new Svidjanje 
+            { 
+                KorisnikID = userId,
+                DogadjajID = id
+            }))
                 return BadRequest();
             return Ok();
         }
 
         // DELETE: api/ApiWithActions/5
-        [HttpDelete("{korisnickiId:int}/{dogadjajId:int}")]
-        public async Task<IActionResult> Delete(int korisnickiId, int dogadjajId)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int userId, int id)
         {
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+            var userFromRepo = await _svidjanjeLogic.GetUser(userId);
 
-            if (!await _svidjanjeLogic.Delete(korisnickiId, dogadjajId))
+            if (!userFromRepo.Svidjanja.Any(p => p.DogadjajID == id))
+                return BadRequest("This user did not liked selected event");
+
+            if (!await _svidjanjeLogic.Delete(userId, id))
                 return BadRequest();
             return Ok();
         }

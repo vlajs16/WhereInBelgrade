@@ -8,8 +8,9 @@ namespace BelgradeLogic
 {
     public interface ISvidjanjeLogic
     {
-        Task<List<Svidjanje>> GetObjects();
+        Task<List<Svidjanje>> GetObjects(int korisnikId);
         Task<bool> Insert(Svidjanje svidjanje);
         Task<bool> Delete(int korisnikId, int dogadjajId);
+        Task<Korisnik> GetUser(int userId);
     }
 }

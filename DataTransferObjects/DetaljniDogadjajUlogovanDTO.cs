@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Model;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Model
+namespace DataTransferObjects
 {
-    public class Dogadjaj
+    public class DetaljniDogadjajUlogovanDTO
     {
         public int DogadjajID { get; set; }
         public string Naziv { get; set; }
@@ -12,9 +13,8 @@ namespace Model
         public DateTime DatumPocetka { get; set; }
         public DateTime DatumZavrsetka { get; set; }
         public virtual Mesto Lokacija { get; set; }
-        public virtual List<Komentar> Komentari { get; set; }
-        public virtual List<KategorijaDogadjaj> KategorijeDogadjaji { get; set; }
-        public virtual List<Svidjanje> Svidjanja { get; set; }
-
+        public KategorijaZaDogadjajDTO MainKategorija { get; set; }
+        public virtual List<KategorijaZaDogadjajDTO> Kategorije { get; set; }
+        public bool Lajkovan { get; set; }
     }
 }

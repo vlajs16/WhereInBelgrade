@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using BelgradeLogic;
 using DataTransferObjects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
@@ -46,7 +48,7 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            Dogadjaj d = await _dogadjajLogic.Find(id); 
+            Dogadjaj d = await _dogadjajLogic.Find(id);
             if (d == null)
                 return BadRequest();
             DetaljniDogadjajDTO dogadjajZaSlanje = _mapper.Map<DetaljniDogadjajDTO>(d);
@@ -79,6 +81,25 @@ namespace API.Controllers
             if (!await _dogadjajLogic.Delete(id))
                 return BadRequest();
             return Ok();
+        }
+
+        [Authorize]
+        [HttpGet("{id}/user/{userId:int}")]
+        public async Task<IActionResult> Get(int id, int userId)
+        {
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+
+            Dogadjaj d = await _dogadjajLogic.Find(id);
+            if (d == null)
+                return BadRequest();
+
+            DetaljniDogadjajDTO dogadjajZaSlanje = _mapper.Map<DetaljniDogadjajDTO>(d);
+
+            if (d.Svidjanja.Any(p => p.KorisnikID == userId))
+                dogadjajZaSlanje.Lajkovan = true;
+
+            return Ok(dogadjajZaSlanje);
         }
     }
 }
