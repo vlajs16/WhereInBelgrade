@@ -60,6 +60,7 @@ namespace API
             services.AddTransient<IDogadjajLogic, DogadjajLogic>();
             services.AddTransient<IKomentarLogic, KomentarLogic>();
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
+            services.AddTransient<IContactEmailLogic, ContactEmailLogic>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
