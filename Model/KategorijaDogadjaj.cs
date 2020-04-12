@@ -10,5 +10,8 @@ namespace Model
         public int DogadjajID { get; set; }
         public virtual Kategorija Kategorija { get; set; }
         public virtual Dogadjaj Dogadjaj { get; set; }
+
+      
+
     }
 }

@@ -24,6 +24,7 @@ namespace Helpers
                 .ForMember(dest => dest.MainKategorija,
                 opt => opt.MapFrom(p => p.KategorijeDogadjaji.FirstOrDefault().Kategorija));
             CreateMap<Kategorija, KategorijaZaDogadjajDTO>();
+            CreateMap<KategorijaDogadjajInsertDTO, Kategorija>();
             CreateMap<Dogadjaj, DogadjajiZaKategorijuDTO>();
             CreateMap<Svidjanje, DogadjajSvidjanjeDTO>()
                 .ForMember(dest => dest.Naziv,
@@ -31,7 +32,15 @@ namespace Helpers
                 .ForMember(dest => dest.ZaKolikoDana, 
                 opt => opt.MapFrom(p => p.Dogadjaj.DatumPocetka.CalculateDays()))
                 .ForMember(dest => dest.MainKategorija,
-                opt => opt.MapFrom(p => p.Dogadjaj.KategorijeDogadjaji.FirstOrDefault().Kategorija));
+                opt => opt.MapFrom(p => p.Dogadjaj.KategorijeDogadjaji.FirstOrDefault().Kategorija))
+                .ForMember(dest => dest.Url, opt => opt.MapFrom(p => p.Dogadjaj.Url))
+                .ForMember(dest=> dest.PublicId, opt => opt.MapFrom(p => p.Dogadjaj.PublicId));
+            CreateMap<DogadjajZaKreiranjeDTO, Dogadjaj>();
+            CreateMap<Kategorija, OnlyKategorijaDTO>()
+                .ForMember(dest => dest.KategorijaID, 
+                opt => opt.MapFrom(p => p.KategorijaID))
+                .ForMember(dest => dest.Naziv,
+                opt => opt.MapFrom(p => p.Naziv));
         }
     }
 }

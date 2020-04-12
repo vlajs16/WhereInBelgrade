@@ -29,6 +29,12 @@ namespace API.Controllers
             return  Ok(await _mestoLogic.GetObjects());
         }
 
+        [HttpGet("find/{criteria}")]
+        public async Task<IActionResult> Get(string criteria)
+        {
+            return Ok(await _mestoLogic.FindByCriteria(criteria));
+        }
+
         // GET: api/Mesto/5
         //[AllowAnonymous]
         [HttpGet("{id}", Name = "GetMesta")]

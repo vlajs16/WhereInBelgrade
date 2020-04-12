@@ -39,6 +39,7 @@ namespace API
             services.AddControllers().AddNewtonsoftJson(options =>
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddCors();
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddDbContext<BeogradContext>(options => options.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=WhereInBelgradeDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
             services.AddTransient<IMestoLogic, MestoLogic>();
             services.AddTransient<IAuthLogic, AuthLogic>();
@@ -59,6 +60,7 @@ namespace API
             services.AddTransient<ISvidjanjeLogic, SvidjanjeLogic>();
             services.AddTransient<IDogadjajLogic, DogadjajLogic>();
             services.AddTransient<IKomentarLogic, KomentarLogic>();
+            services.AddTransient<IKorisnikLogic, KorisnikLogic>();
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
         }
 

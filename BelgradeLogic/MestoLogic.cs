@@ -34,6 +34,11 @@ namespace BelgradeLogic
             return await _beogradContext.Mesta.FirstOrDefaultAsync(p => p.MestoID == id);
         }
 
+        public async Task<List<Mesto>> FindByCriteria(string criteria)
+        {
+            return await _beogradContext.Mesta.Where(x => x.Naziv.ToLower().Contains(criteria.ToLower())).ToListAsync();
+        }
+
         public async Task<List<Mesto>> GetObjects()
         {
             return await _beogradContext.Mesta.ToListAsync();

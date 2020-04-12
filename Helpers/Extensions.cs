@@ -1,8 +1,11 @@
 ﻿using DataAccessLayer;
+using DataTransferObjects;
 using Microsoft.AspNetCore.Http;
 using Model;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 
 namespace Helpers
@@ -32,5 +35,36 @@ namespace Helpers
             }
             return noveKategorije;
         }
+
+        public static List<KategorijaDogadjaj> ConvertToEvent(List<Kategorija> kategorije, int id)
+        {
+            List<KategorijaDogadjaj> kategorijeDogadjaji = new List<KategorijaDogadjaj>();
+            foreach (var kategorija in kategorije)
+            {
+                kategorijeDogadjaji.Add(new KategorijaDogadjaj
+                {
+                    Kategorija = new Kategorija 
+                    {
+                        KategorijaID = kategorija.KategorijaID,
+                        Naziv = kategorija.Naziv
+                    },
+                    KategorijaID = kategorija.KategorijaID,
+                    DogadjajID = id,
+                    Dogadjaj = new Dogadjaj { DogadjajID = id }
+                });
+            }
+            return kategorijeDogadjaji;
+        }
+
+        public static  byte[] GetBytes(this IFormFile formFile)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                formFile.CopyTo(memoryStream);
+                return memoryStream.ToArray();
+            }
+        }
+
+
     }
 }

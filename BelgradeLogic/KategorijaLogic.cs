@@ -43,11 +43,12 @@ namespace BelgradeLogic
             List<Dogadjaj> dogadjaji;
             if (string.IsNullOrEmpty(kategorija))
             {
-                dogadjaji = _beogradContext.Dogadjaji.ToList();
+                dogadjaji = await _beogradContext.Dogadjaji.OrderByDescending(x => x.DogadjajID).ToListAsync();
             }
             else {
-                dogadjaji = _beogradContext.Dogadjaji.
-                Where(p => p.KategorijeDogadjaji.Any(k => k.Kategorija.Naziv == kategorija)).ToList();
+                dogadjaji = await _beogradContext.Dogadjaji.
+                Where(p => p.KategorijeDogadjaji.Any(k => k.Kategorija.Naziv == kategorija))
+                .OrderByDescending(x => x.DogadjajID).ToListAsync();
             }
             return dogadjaji;
         }

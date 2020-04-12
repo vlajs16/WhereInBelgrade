@@ -12,6 +12,7 @@ namespace BelgradeLogic
         Task<bool> Update(Mesto mesto);
         Task<bool> Delete(int id);
         Task<Mesto> Find(int id);
+        Task<List<Mesto>> FindByCriteria(string criteria);
 
     }
 }

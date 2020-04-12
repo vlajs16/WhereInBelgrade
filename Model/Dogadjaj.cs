@@ -15,6 +15,7 @@ namespace Model
         public virtual List<Komentar> Komentari { get; set; }
         public virtual List<KategorijaDogadjaj> KategorijeDogadjaji { get; set; }
         public virtual List<Svidjanje> Svidjanja { get; set; }
-
+        public string Url { get; set; }
+        public string PublicId { get; set; }
     }
 }
