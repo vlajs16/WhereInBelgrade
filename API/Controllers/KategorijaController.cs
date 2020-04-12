@@ -28,7 +28,9 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok(await _kategorijaLogic.GetObjects());
+            var kategorijeFromRepo = await _kategorijaLogic.GetObjects();
+            var kategorijeZaVracanje = _mapper.Map<List<OnlyKategorijaDTO>>(kategorijeFromRepo);
+            return Ok(kategorijeZaVracanje);
         }
 
         // GET: api/Kategorija/5

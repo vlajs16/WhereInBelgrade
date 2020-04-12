@@ -16,5 +16,7 @@ namespace DataTransferObjects
         public KategorijaZaDogadjajDTO MainKategorija { get; set; }
         public virtual List<KategorijaZaDogadjajDTO> Kategorije { get; set; }
         public bool Lajkovan { get; set; }
+        public string Url { get; set; }
+        public string PublicId { get; set; }
     }
 }

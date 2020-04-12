@@ -11,5 +11,7 @@ namespace DataTransferObjects
         public string Naziv { get; set; }
         public int ZaKolikoDana { get; set; }
         public KategorijaZaDogadjajDTO MainKategorija { get; set; }
+        public string Url { get; set; }
+        public string PublicId { get; set; }
     }
 }

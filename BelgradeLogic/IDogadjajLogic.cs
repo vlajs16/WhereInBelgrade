@@ -10,6 +10,7 @@ namespace BelgradeLogic
     {
         Task<List<Dogadjaj>> GetObjects();
         Task<List<Dogadjaj>> GetObjectsByKategorija(string kategorija);
+        Task<List<Dogadjaj>> GetObjectsByKategorijaThree(string kategorija);
         Task<bool> Insert(Dogadjaj dogadjaj);
         Task<bool> Update(Dogadjaj dogadjaj);
         Task<bool> Delete(int id);

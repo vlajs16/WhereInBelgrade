@@ -8,8 +8,8 @@ namespace Model
         public string Naziv { get; set; }
         public string Ulica { get; set; }
         public string BrojUlice { get; set; }
-        public int Sprat { get; set; }
-        public int BrojStana { get; set; }
+        public int? Sprat { get; set; }
+        public int? BrojStana { get; set; }
 
         // override object.Equals
         public override bool Equals(object obj)
