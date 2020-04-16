@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using Helpers;
 using Microsoft.EntityFrameworkCore;
 using Model;
 using System;
@@ -17,9 +18,12 @@ namespace BelgradeLogic
         {
             _beogradContext = beogradContext;
         }
-        public async Task<List<Svidjanje>> GetObjects(int korisnikId)
+        public async Task<PagedList<Svidjanje>> GetObjects(EventParams eventParams, int korisnikId)
         {
-            return await _beogradContext.Svidjanja.Where(s => s.KorisnikID == korisnikId).ToListAsync();
+            var svidjanja = _beogradContext.Svidjanja.Where(s => s.KorisnikID == korisnikId)
+                .OrderByDescending(s => s.DogadjajID);
+            return await PagedList<Svidjanje>.CreateAsync(svidjanja, eventParams.PageNumber, eventParams.PageSize);
+
         }
 
         public async Task<bool> Insert(Svidjanje svidjanje)

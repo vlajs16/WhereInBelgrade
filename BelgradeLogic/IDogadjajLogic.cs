@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using Helpers;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,8 +9,8 @@ namespace BelgradeLogic
 {
     public interface IDogadjajLogic
     {
-        Task<List<Dogadjaj>> GetObjects();
-        Task<List<Dogadjaj>> GetObjectsByKategorija(string kategorija);
+        Task<PagedList<Dogadjaj>> GetObjects(EventParams userParams);
+        Task<PagedList<Dogadjaj>> GetObjectsByKategorija(EventParams userParams, string kategorija);
         Task<List<Dogadjaj>> GetObjectsByKategorijaThree(string kategorija);
         Task<bool> Insert(Dogadjaj dogadjaj);
         Task<bool> Update(Dogadjaj dogadjaj);

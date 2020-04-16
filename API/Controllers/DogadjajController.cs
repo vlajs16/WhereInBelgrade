@@ -51,20 +51,26 @@ namespace API.Controllers
         }
         // GET: api/Dogadjaj
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] EventParams eventParams)
         {
-            List<Dogadjaj> dogadjajiIzBaze = await _dogadjajLogic.GetObjects();
+            var dogadjaji = await _dogadjajLogic.GetObjects(eventParams);
             List<DogadjajZaListuDTO> dogadjajiZaVracanje =
-                _mapper.Map<List<DogadjajZaListuDTO>>(dogadjajiIzBaze);
+                _mapper.Map<List<DogadjajZaListuDTO>>(dogadjaji);
+
+            Response.AddPagination(dogadjaji.CurrentPage, dogadjaji.PageSize, 
+                dogadjaji.TotalCount, dogadjaji.TotalPages);
+
             return Ok(dogadjajiZaVracanje);
         }
 
         [HttpGet("kategorija/{kategorija}")]
-        public async Task<IActionResult> Get(string kategorija)
+        public async Task<IActionResult> Get(string kategorija, [FromQuery] EventParams eventParams)
         {
-            List<Dogadjaj> dogadjajiIzBaze = await _dogadjajLogic.GetObjectsByKategorija(kategorija);
+            var dogadjaji = await _dogadjajLogic.GetObjectsByKategorija(eventParams, kategorija);
             List<DogadjajZaListuDTO> dogadjajiZaVracanje =
-                _mapper.Map<List<DogadjajZaListuDTO>>(dogadjajiIzBaze);
+                _mapper.Map<List<DogadjajZaListuDTO>>(dogadjaji);
+            Response.AddPagination(dogadjaji.CurrentPage, dogadjaji.PageSize,
+                dogadjaji.TotalCount, dogadjaji.TotalPages);
             return Ok(dogadjajiZaVracanje);
         }
 

@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using Helpers;
 using Microsoft.EntityFrameworkCore;
 using Model;
 using System;
@@ -32,17 +33,18 @@ namespace BelgradeLogic
             return await _beogradContext.Dogadjaji.FirstOrDefaultAsync(x => x.DogadjajID == id);
         }
 
-        public async Task<List<Dogadjaj>> GetObjects()
+        public async Task<PagedList<Dogadjaj>> GetObjects(EventParams eventParams)
         {
-            return await _beogradContext.Dogadjaji.OrderByDescending(x => x.DogadjajID).ToListAsync();
+            var dogadjaji = _beogradContext.Dogadjaji.OrderByDescending(x => x.DogadjajID);
+            return await PagedList<Dogadjaj>.CreateAsync(dogadjaji, eventParams.PageNumber, eventParams.PageSize);
         }
 
-        public async Task<List<Dogadjaj>> GetObjectsByKategorija(string kategorija)
+        public async Task<PagedList<Dogadjaj>> GetObjectsByKategorija(EventParams eventParams, string kategorija)
         {
-            List<Dogadjaj> dogadjaji =  await _beogradContext.Dogadjaji.
+            var dogadjaji =  _beogradContext.Dogadjaji.
                 Where(p => p.KategorijeDogadjaji.Any(k => k.Kategorija.Naziv == kategorija))
-                .OrderByDescending(x => x.DogadjajID).ToListAsync();
-            return dogadjaji;
+                .OrderByDescending(x => x.DogadjajID);
+            return await PagedList<Dogadjaj>.CreateAsync(dogadjaji, eventParams.PageNumber, eventParams.PageSize);
         }
 
         public async Task<List<Dogadjaj>> GetObjectsByKategorijaThree(string kategorija)
