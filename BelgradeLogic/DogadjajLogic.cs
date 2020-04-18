@@ -83,13 +83,20 @@ namespace BelgradeLogic
             d.Naziv = dogadjaj.Naziv;
             d.Opis = dogadjaj.Opis;
             d.Lokacija = dogadjaj.Lokacija;
+            d.Url = dogadjaj.Url;
             //foreach (var katDog in dogadjaj.KategorijeDogadjaji)
             //{
             //    katDog.Kategorija = await _beogradContext.Kategorije.FirstOrDefaultAsync(k => k.KategorijaID == katDog.KategorijaID);
             //    if(await _beogradContext.KategorijeDogadjaji.FirstOrDefaultAsync(k => k.DogadjajID == d.DogadjajID && k.KategorijaID == katDog.KategorijaID) == null)
             //        _beogradContext.KategorijeDogadjaji.Add(katDog);
             //}
+
+
             List<KategorijaDogadjaj> kategorijeDogadjaji = new List<KategorijaDogadjaj>();
+            //d.KategorijeDogadjaji = kategorijeDogadjaji;
+            //await _beogradContext.SaveChangesAsync();
+
+
             foreach (KategorijaDogadjaj katDog in dogadjaj.KategorijeDogadjaji)
             {
                 kategorijeDogadjaji.Add(new KategorijaDogadjaj
@@ -103,8 +110,15 @@ namespace BelgradeLogic
             d.DatumPocetka = dogadjaj.DatumPocetka;
             d.DatumZavrsetka = dogadjaj.DatumZavrsetka;
             //_beogradContext.Dogadjaji.Update(d);
-            await _beogradContext.SaveChangesAsync();
-            return true;
+            try
+            {
+                await _beogradContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

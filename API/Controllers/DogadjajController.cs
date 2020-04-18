@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -163,14 +164,94 @@ namespace API.Controllers
             return Ok();
         }
 
-        // PUT: api/Dogadjaj/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Dogadjaj dogadjaj)
+        // PUT: api/dogadjaj/user/2
+        [Authorize]
+        [HttpPut("user/{userId}")]
+        public async Task<IActionResult> Put([FromForm] DogadjajZaKreiranjeDTO dogadjajZaKreiranjeDTO, int userId)
         {
-            dogadjaj.DogadjajID = id;
-            if (!await _dogadjajLogic.Update(dogadjaj))
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized("Niste prijavljeni");
+            if (!await _korisnikLogic.IsAdmin(userId))
+                return Unauthorized("Vi niste admin");
+
+            //trazim oiginalne podatke o tom dogadjaju
+            Dogadjaj d = await _dogadjajLogic.Find(dogadjajZaKreiranjeDTO.DogadjajID);
+            if (d == null)
                 return BadRequest();
-            return Ok();
+            DogadjajiZaKategorijuDTO originalanDogadjaj = _mapper.Map<DogadjajiZaKategorijuDTO>(d);
+
+            //provera da li je promenjena slika
+            var file = dogadjajZaKreiranjeDTO.Image;
+            var uploadResult = new ImageUploadResult();
+            if (file != null && file.Length > 0)
+            {
+                using (var stream = file.OpenReadStream())
+                {
+                    var uploadParams = new ImageUploadParams
+                    {
+                        File = new FileDescription(file.Name, stream)
+                    };
+
+                    uploadResult = _cloudinary.Upload(uploadParams);
+                }
+                dogadjajZaKreiranjeDTO.Url = uploadResult.Uri.ToString();
+                dogadjajZaKreiranjeDTO.PublicId = uploadResult.PublicId;
+            }
+            else
+            {
+                dogadjajZaKreiranjeDTO.Url = originalanDogadjaj.Url.ToString();
+                dogadjajZaKreiranjeDTO.PublicId = originalanDogadjaj.PublicId;
+            }
+            
+
+            var eventForDb = _mapper.Map<Dogadjaj>(dogadjajZaKreiranjeDTO);
+            eventForDb.Lokacija = await _mestoLogic.Find(dogadjajZaKreiranjeDTO.MestoID);
+
+            //if (!await _dogadjajLogic.Update(eventForDb))
+            //    return BadRequest("Neuspešno izmenjen dogadjaj");
+
+            List<Kategorija> kategorije = new List<Kategorija>();
+            if (dogadjajZaKreiranjeDTO.Kategorija1 != null)
+            {
+                int id = dogadjajZaKreiranjeDTO.Kategorija1 ?? default(int);
+                kategorije.Add(await _kategorijaLogic.Find(id));
+            }
+            if (dogadjajZaKreiranjeDTO.Kategorija2 != null)
+            {
+                int id = dogadjajZaKreiranjeDTO.Kategorija2 ?? default(int);
+                kategorije.Add(await _kategorijaLogic.Find(id));
+            }
+            if (dogadjajZaKreiranjeDTO.Kategorija3 != null)
+            {
+                int id = dogadjajZaKreiranjeDTO.Kategorija3 ?? default(int);
+                kategorije.Add(await _kategorijaLogic.Find(id));
+            }
+            if (dogadjajZaKreiranjeDTO.Kategorija4 != null)
+            {
+                int id = dogadjajZaKreiranjeDTO.Kategorija4 ?? default(int);
+                kategorije.Add(await _kategorijaLogic.Find(id));
+            }
+            if (dogadjajZaKreiranjeDTO.Kategorija5 != null)
+            {
+                int id = dogadjajZaKreiranjeDTO.Kategorija5 ?? default(int);
+                kategorije.Add(await _kategorijaLogic.Find(id));
+            }
+
+            if (kategorije != null)
+            {
+                eventForDb.KategorijeDogadjaji = Helpers.Extensions.ConvertToEvent(kategorije, eventForDb.DogadjajID);
+            }
+            try
+            {
+                if (!await _dogadjajLogic.Update(eventForDb))
+                    return BadRequest("Kategorije neuspešno sačuvane");
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(">>>>>>>>" + ex.Message);
+                return BadRequest("Kategorije neuspešno sačuvane");
+            }
         }
 
         // DELETE: api/ApiWithActions/5
