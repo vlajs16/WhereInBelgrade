@@ -18,6 +18,7 @@ namespace DataAccessLayer
         public BeogradContext( DbContextOptions<BeogradContext> options) 
             : base(options)
         {
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -25,13 +26,14 @@ namespace DataAccessLayer
             modelBuilder.Entity<Komentar>().HasKey(k => new { k.KorisnikID, k.DogadjajID });
             modelBuilder.Entity<Svidjanje>().HasKey(s => new { s.KorisnikID, s.DogadjajID });
             modelBuilder.Entity<KategorijaDogadjaj>().HasKey(kd => new { kd.KategorijaID, kd.DogadjajID });
-
+            
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.EnableSensitiveDataLogging();
             optionsBuilder.UseLazyLoadingProxies();
+
         }
     }
 }

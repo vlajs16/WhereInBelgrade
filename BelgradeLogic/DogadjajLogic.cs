@@ -122,5 +122,69 @@ namespace BelgradeLogic
                 throw;
             }
         }
+
+        public async Task<bool> Update2(Dogadjaj dogadjaj)
+        {
+            var d = await _beogradContext.Dogadjaji.FirstOrDefaultAsync(p => p.DogadjajID == dogadjaj.DogadjajID);
+            if (d == null)
+                return false;
+            d.Naziv = dogadjaj.Naziv;
+            d.Opis = dogadjaj.Opis;
+            d.Lokacija = dogadjaj.Lokacija;
+            d.Url = dogadjaj.Url;
+            
+
+
+            List<KategorijaDogadjaj> kategorijeDogadjaji = d.KategorijeDogadjaji;
+            //d.KategorijeDogadjaji = kategorijeDogadjaji;
+            //await _beogradContext.SaveChangesAsync();
+
+
+            //foreach (KategorijaDogadjaj katDog in dogadjaj.KategorijeDogadjaji)
+            //{
+            //    kategorijeDogadjaji.Add(new KategorijaDogadjaj
+            //    {
+            //        Kategorija = _beogradContext.Kategorije.FirstOrDefault(k => k.KategorijaID == katDog.KategorijaID),
+            //        KategorijaID = (_beogradContext.Kategorije.FirstOrDefault(k => k.KategorijaID == katDog.KategorijaID)).KategorijaID,
+            //        DogadjajID = d.DogadjajID
+            //    });
+
+            // izbacujemo
+            foreach (var katDog in d.KategorijeDogadjaji.ToList())
+            {
+                if (!dogadjaj.KategorijeDogadjaji.Contains(katDog))
+                    d.KategorijeDogadjaji.Remove(katDog);
+            }
+            
+            // ubacujemo u nase kategorije
+            foreach (KategorijaDogadjaj katDog in dogadjaj.KategorijeDogadjaji)
+            {
+                if(d.KategorijeDogadjaji != null) { 
+                    if (d.KategorijeDogadjaji.Contains(katDog))
+                        continue;
+                }
+                d.KategorijeDogadjaji.Add(new KategorijaDogadjaj
+                {
+                    Kategorija = _beogradContext.Kategorije.FirstOrDefault(k => k.KategorijaID == katDog.KategorijaID),
+                    KategorijaID = (_beogradContext.Kategorije.FirstOrDefault(k => k.KategorijaID == katDog.KategorijaID)).KategorijaID,
+                    DogadjajID = d.DogadjajID
+                });
+            }
+
+
+            //d.KategorijeDogadjaji = kategorijeDogadjaji;
+            d.DatumPocetka = dogadjaj.DatumPocetka;
+            d.DatumZavrsetka = dogadjaj.DatumZavrsetka;
+            //_beogradContext.Dogadjaji.Update(d);
+            try
+            {
+                await _beogradContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

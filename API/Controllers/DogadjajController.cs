@@ -249,7 +249,7 @@ namespace API.Controllers
             }
             try
             {
-                if (!await _dogadjajLogic.Update(eventForDb))
+                if (!await _dogadjajLogic.Update2(eventForDb))
                     return BadRequest("Kategorije neuspešno sačuvane");
                 return Ok();
             }
