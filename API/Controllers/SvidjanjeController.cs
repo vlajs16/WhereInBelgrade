@@ -7,6 +7,7 @@ using AutoMapper;
 using BelgradeLogic;
 using DataAccessLayer;
 using DataTransferObjects;
+using Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,13 +31,16 @@ namespace API.Controllers
         }
         // GET: api/Svidjanje
         [HttpGet]
-        public async Task<IActionResult> Get(int userId)
+        public async Task<IActionResult> Get(int userId, [FromQuery] EventParams eventParams)
         {
             if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
                 return Unauthorized();
             var userFromRepo = await _svidjanjeLogic.GetUser(userId);
-            var likes = await _svidjanjeLogic.GetObjects(userId);
+            var likes = await _svidjanjeLogic.GetObjects(eventParams, userId);
             var likedEvents = _mapper.Map<List<DogadjajSvidjanjeDTO>>(likes);
+
+            Response.AddPagination(likes.CurrentPage, likes.PageSize,
+                likes.TotalCount, likes.TotalPages);
 
             return Ok(likedEvents);
         }

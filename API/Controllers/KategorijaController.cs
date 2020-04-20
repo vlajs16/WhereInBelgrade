@@ -6,6 +6,7 @@ using AutoMapper;
 using BelgradeLogic;
 using DataAccessLayer;
 using DataTransferObjects;
+using Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Model;
@@ -44,21 +45,37 @@ namespace API.Controllers
         }
 
         [HttpGet("{kategorija}/dogadjaji")]
-        public async Task<IActionResult> Get(string kategorija)
+        public async Task<IActionResult> Get(string kategorija, [FromQuery] EventParams eventParams)
         {
-            List<Dogadjaj> dogadjajiIzBaze = await _kategorijaLogic.GetObjectsByKategorija(kategorija);
+            var dogadjaji = await _kategorijaLogic.GetObjectsByKategorija(eventParams, kategorija);
             List<DogadjajiZaKategorijuDTO> dogadjajiZaVracanje =
-                _mapper.Map<List<DogadjajiZaKategorijuDTO>>(dogadjajiIzBaze);
+                _mapper.Map<List<DogadjajiZaKategorijuDTO>>(dogadjaji);
+
+            Response.AddPagination(dogadjaji.CurrentPage, dogadjaji.PageSize,
+                 dogadjaji.TotalCount, dogadjaji.TotalPages);
+
             return Ok(dogadjajiZaVracanje);
         }
 
         [HttpGet("dogadjaji")]
-        public async Task<IActionResult> Get(bool provera)
+        public async Task<IActionResult> Get(bool provera, [FromQuery] EventParams eventParams)
         {
-            List<Dogadjaj> dogadjajiIzBaze = await _kategorijaLogic.GetObjectsByKategorija("");
+            var dogadjajiIzBaze = await _kategorijaLogic.GetObjectsByKategorija(eventParams, "");
             List<DogadjajiZaKategorijuDTO> dogadjajiZaVracanje =
                 _mapper.Map<List<DogadjajiZaKategorijuDTO>>(dogadjajiIzBaze);
+            Response.AddPagination(dogadjajiIzBaze.CurrentPage, dogadjajiIzBaze.PageSize,
+                dogadjajiIzBaze.TotalCount, dogadjajiIzBaze.TotalPages);
+
             return Ok(dogadjajiZaVracanje);
+        }
+
+        [HttpGet("dogadjaji/full")]
+        public async Task<IActionResult> GetFull()
+        {
+            List<Dogadjaj> dogadjajiIzBaze = await _kategorijaLogic.GetAllEvents();
+            List<DogadjajiZaKategorijuDTO> dogadjajiZaKategoriju = 
+                _mapper.Map<List<DogadjajiZaKategorijuDTO>>(dogadjajiIzBaze);
+            return Ok(dogadjajiZaKategoriju);
         }
 
         // POST: api/Kategorija

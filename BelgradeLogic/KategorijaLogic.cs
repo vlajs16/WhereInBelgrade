@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using Helpers;
 using Microsoft.EntityFrameworkCore;
 using Model;
 using System;
@@ -33,24 +34,31 @@ namespace BelgradeLogic
             return await _beogradContext.Kategorije.FirstOrDefaultAsync(x => x.KategorijaID == id);
         }
 
+        public async Task<List<Dogadjaj>> GetAllEvents()
+        {
+            return await _beogradContext.Dogadjaji.OrderByDescending(x => x.DogadjajID).ToListAsync();
+        }
+
         public async Task<List<Kategorija>> GetObjects()
         {
             return await _beogradContext.Kategorije.ToListAsync();
         }
 
-        public async Task<List<Dogadjaj>> GetObjectsByKategorija(string kategorija)
+        public async Task<PagedList<Dogadjaj>> GetObjectsByKategorija(EventParams eventParams, string kategorija)
         {
-            List<Dogadjaj> dogadjaji;
+            
             if (string.IsNullOrEmpty(kategorija))
             {
-                dogadjaji = await _beogradContext.Dogadjaji.OrderByDescending(x => x.DogadjajID).ToListAsync();
+                var dogadjaji =  _beogradContext.Dogadjaji.OrderByDescending(x => x.DogadjajID);
+                return await PagedList<Dogadjaj>.CreateAsync(dogadjaji, eventParams.PageNumber, eventParams.PageSize);
             }
-            else {
-                dogadjaji = await _beogradContext.Dogadjaji.
-                Where(p => p.KategorijeDogadjaji.Any(k => k.Kategorija.Naziv == kategorija))
-                .OrderByDescending(x => x.DogadjajID).ToListAsync();
-            }
-            return dogadjaji;
+            
+               
+            var events =  _beogradContext.Dogadjaji
+                .Where(p => p.KategorijeDogadjaji.Any(k => k.Kategorija.Naziv == kategorija))
+                .OrderByDescending(x => x.DogadjajID);
+            return await PagedList<Dogadjaj>.CreateAsync(events, eventParams.PageNumber, eventParams.PageSize);
+
         }
 
         public async Task<bool> Insert(Kategorija kategorija)
