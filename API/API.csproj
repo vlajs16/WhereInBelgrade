@@ -27,6 +27,7 @@
     <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj" />
     <ProjectReference Include="..\DataTransferObjects\DataTransferObjects.csproj" />
     <ProjectReference Include="..\Helpers\Helpers.csproj" />
+    <ProjectReference Include="..\SeedData\SeedData.csproj" />
   </ItemGroup>
 
 </Project>

@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BelgradeLogic", "BelgradeLo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTransferObjects", "DataTransferObjects\DataTransferObjects.csproj", "{DC2C7EA6-EFD2-40DF-A095-2998BC53406F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.csproj", "{2B3E27C9-8F8A-461B-9620-96123A59ABA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers", "Helpers\Helpers.csproj", "{2B3E27C9-8F8A-461B-9620-96123A59ABA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeedData", "SeedData\SeedData.csproj", "{4A660615-67A1-42F3-855D-9F68852BBAF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{2B3E27C9-8F8A-461B-9620-96123A59ABA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B3E27C9-8F8A-461B-9620-96123A59ABA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B3E27C9-8F8A-461B-9620-96123A59ABA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A660615-67A1-42F3-855D-9F68852BBAF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A660615-67A1-42F3-855D-9F68852BBAF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A660615-67A1-42F3-855D-9F68852BBAF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A660615-67A1-42F3-855D-9F68852BBAF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
