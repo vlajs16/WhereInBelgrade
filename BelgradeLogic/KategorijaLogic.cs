@@ -36,6 +36,8 @@ namespace BelgradeLogic
 
         public async Task<List<Dogadjaj>> GetAllEvents()
         {
+            
+            
             return await _beogradContext.Dogadjaji.OrderByDescending(x => x.DogadjajID).ToListAsync();
         }
 
@@ -49,14 +51,40 @@ namespace BelgradeLogic
             
             if (string.IsNullOrEmpty(kategorija))
             {
-                var dogadjaji =  _beogradContext.Dogadjaji.OrderByDescending(x => x.DogadjajID);
+                IQueryable<Dogadjaj> dogadjaji;
+
+                if (eventParams.Criteria == null)
+                {
+                     dogadjaji =  _beogradContext.Dogadjaji.OrderByDescending(x => x.DogadjajID);
+                }
+                else
+                {
+                    var cat = eventParams.Criteria.ToLower();
+                    dogadjaji = _beogradContext.Dogadjaji.Where(p => p.Naziv.ToLower().Contains(cat)
+                    || p.Opis.ToLower().Contains(cat) ||
+                    p.KategorijeDogadjaji.Any(k => k.Kategorija.Naziv.ToLower().Contains(cat))).OrderByDescending(x => x.DogadjajID);
+
+                }
                 return await PagedList<Dogadjaj>.CreateAsync(dogadjaji, eventParams.PageNumber, eventParams.PageSize);
             }
-            
-               
-            var events =  _beogradContext.Dogadjaji
+            IQueryable<Dogadjaj> events;
+
+            if (eventParams.Criteria == null)
+            {
+                 events = _beogradContext.Dogadjaji
                 .Where(p => p.KategorijeDogadjaji.Any(k => k.Kategorija.Naziv == kategorija))
                 .OrderByDescending(x => x.DogadjajID);
+            }
+            else
+            {
+                var cat = eventParams.Criteria.ToLower();
+                events = _beogradContext.Dogadjaji.Where(p => p.KategorijeDogadjaji.Any(k => k.Kategorija.Naziv == kategorija)
+                && (p.Naziv.ToLower().Contains(cat)
+                || p.Opis.ToLower().Contains(cat) ||
+                p.KategorijeDogadjaji.Any(k => k.Kategorija.Naziv.ToLower().Contains(cat)))).OrderByDescending(x => x.DogadjajID);
+
+            }
+            
             return await PagedList<Dogadjaj>.CreateAsync(events, eventParams.PageNumber, eventParams.PageSize);
 
         }

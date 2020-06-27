@@ -35,15 +35,39 @@ namespace BelgradeLogic
 
         public async Task<PagedList<Dogadjaj>> GetObjects(EventParams eventParams)
         {
-            var dogadjaji = _beogradContext.Dogadjaji.OrderByDescending(x => x.DogadjajID);
+            IQueryable<Dogadjaj> dogadjaji;
+            if(eventParams.Criteria == null)
+            {
+               dogadjaji = _beogradContext.Dogadjaji.OrderByDescending(x => x.DogadjajID);
+            }
+            else
+            {
+                var cat = eventParams.Criteria.ToLower();
+                dogadjaji = _beogradContext.Dogadjaji.Where(p => p.Naziv.ToLower().Contains(cat) 
+                || p.Opis.ToLower().Contains(cat) || 
+                p.KategorijeDogadjaji.Any(k => k.Kategorija.Naziv.ToLower().Contains(cat))).OrderByDescending(x => x.DogadjajID);
+
+            }
             return await PagedList<Dogadjaj>.CreateAsync(dogadjaji, eventParams.PageNumber, eventParams.PageSize);
         }
 
         public async Task<PagedList<Dogadjaj>> GetObjectsByKategorija(EventParams eventParams, string kategorija)
         {
-            var dogadjaji =  _beogradContext.Dogadjaji.
+            IQueryable<Dogadjaj> dogadjaji;
+            if(eventParams.Criteria == null)
+            {
+                dogadjaji =  _beogradContext.Dogadjaji.
                 Where(p => p.KategorijeDogadjaji.Any(k => k.Kategorija.Naziv == kategorija))
                 .OrderByDescending(x => x.DogadjajID);
+            }
+            else
+            {
+                var cat = eventParams.Criteria.ToLower();
+                dogadjaji = _beogradContext.Dogadjaji.
+                Where(p => p.KategorijeDogadjaji.Any(k => k.Kategorija.Naziv == kategorija) &&
+                (p.Naziv.ToLower().Contains(cat) || p.Opis.ToLower().Contains(cat)))
+                .OrderByDescending(x => x.DogadjajID);
+            }
             return await PagedList<Dogadjaj>.CreateAsync(dogadjaji, eventParams.PageNumber, eventParams.PageSize);
         }
 
